@@ -10,6 +10,14 @@ let movies = [
     {id: 3, title: 'The Dark Knight', director: 'Christopher Nolan', year: 2008 }
 ];
 
+let directors = [
+    { id: 1, name: 'Bong Joon-ho', year: 2019 },
+    { id: 2, name: 'Francis Ford Coppola', year: 1972 },
+    { id: 3, name: 'Christopher Nolan', year: 2008 }
+];
+
+
+
 app.get('/',(req, res) => {
     res.send('Selamat datang di API Film!');
 });
@@ -35,6 +43,20 @@ app.get('/movies/title/:title', (req, res) => {
     }
 });
 
+app.get('/directors', (req, res) => {
+    res.json(directors);
+});
+
+app.get('/directors/:id', (req, res) => {
+    const director = directors.find(d => d.id === parseInt(req.params.id));
+    if (director) {
+        res.json(director);
+    } else {
+        res.status(404).send('Sutradara tidak ditemukan');
+    }
+});
+
+
 app.post('/movies', (req, res) => {
     const newMovie = {
         id: movies.length + 1,
@@ -45,6 +67,17 @@ app.post('/movies', (req, res) => {
     movies.push(newMovie);
     res.status(201).json(newMovie);
 });
+
+app.post('/directors', (req, res) => {
+    const newDirector = {
+        id: directors.length + 1,  
+        name: req.body.name,
+        year: req.body.year
+    };
+    directors.push(newDirector);
+    res.status(201).json(newDirector);
+});
+
 
 // PUT/movies/:id-Memperbaruidatafilm
  app.put('/movies/:id',(req, res)=>{
